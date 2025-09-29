@@ -7,6 +7,8 @@ export class GeminiController {
 
   @Get()
   getHello(): string {
-    return 'Hello from GeminiController!';
+    const apiKey = process.env.GEMINI_API_KEY;
+
+    return `Hello from GeminiController!\n Your API Key is: ${apiKey}`;
   }
 }
