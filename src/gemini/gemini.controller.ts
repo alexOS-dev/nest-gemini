@@ -39,15 +39,13 @@ export class GeminiController {
 
     const stream = await this.geminiService.basicPromptStream(basicPromptDto);
 
-    res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
     res.status(HttpStatus.OK);
 
     for await (const chunk of stream) {
       const piece = chunk.text;
-      console.log(piece);
       res.write(piece);
     }
-
     res.end();
   }
 }
