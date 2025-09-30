@@ -11,6 +11,8 @@ export const basicPromptStreamUseCase = async (
   basicPromptDto: BasicPromptDto,
   options?: Options,
 ) => {
+  const files = basicPromptDto.files ?? [];
+
   const {
     model = 'gemini-2.5-flash',
     systemInstruction = `

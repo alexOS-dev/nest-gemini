@@ -1,7 +1,17 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Post,
+  Res,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { type Response } from 'express';
 import { GeminiService } from './gemini.service';
 import { BasicPromptDto } from './dtos/basic-prompt.dto';
-import { type Response } from 'express';
 
 @Controller('gemini')
 export class GeminiController {
@@ -19,11 +29,14 @@ export class GeminiController {
     return this.geminiService.basicPrompt(basicPromptDto);
   }
   @Post('basic-prompt-stream')
+  @UseInterceptors(FilesInterceptor('files'))
   async basicPromptStream(
     @Body() basicPromptDto: BasicPromptDto,
     @Res() res: Response,
-    // TODO: Files
+    @UploadedFiles() files: Express.Multer.File[],
   ) {
+    basicPromptDto.files = files;
+
     const stream = await this.geminiService.basicPromptStream(basicPromptDto);
 
     res.setHeader('Content-Type', 'text/plain');
